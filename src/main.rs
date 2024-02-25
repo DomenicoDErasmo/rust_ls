@@ -1,4 +1,4 @@
-// Personal LS command implementation
+//! Personal LS command implementation
 
 fn main() {
     println!("Hello, world!");
