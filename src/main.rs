@@ -1,6 +1,7 @@
 //! Personal LS command implementation
 use rust_ls::argument_parsing::Arguments;
 use std::env;
+use std::fs::read_dir;
 
 fn main() {
     let all_raw_args = env::args().collect::<Vec<String>>();
@@ -16,5 +17,20 @@ fn main() {
             return;
         }
     };
+
     println!("{args:#?}");
+
+    let directory = "./";
+    let Ok(paths) = read_dir(directory) else {
+        eprintln!("Failed to read directory {directory}.");
+        return;
+    };
+
+    for path_entry in paths {
+        let Ok(path) = path_entry else {
+            eprintln!("Failed to open {path_entry:?}.");
+            return;
+        };
+        println!("Name: {}", path.path().display());
+    }
 }
