@@ -2,7 +2,7 @@
 use rust_ls::argument_parsing::Arguments;
 use std::env;
 use std::fs::{metadata, read_dir};
-use std::os::windows::fs::MetadataExt;
+use std::os::linux::fs::MetadataExt;
 
 fn main() {
     let all_raw_args = env::args().collect::<Vec<String>>();
@@ -38,10 +38,9 @@ fn main() {
             return;
         };
         println!(
-            "File Type: {:?}, Permissions: {:?}, Owner: {:?}",
+            "File Type: {:?}, Permissions: {:?}",
             metadata.file_type(),
             metadata.permissions(),
-            metadata.file_attributes()
         );
         // TODO: get group and user owners with libc
         // TODO: get file size, last modified
