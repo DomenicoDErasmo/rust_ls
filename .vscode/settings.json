@@ -1,11 +1,7 @@
 {
     "nixEnvSelector.suggestion": false,
-    "nixEnvSelector.nixFile": "${workspaceRoot}/shell.nix",
-    "git.confirmSync": false,
     "git.autofetch": true,
     "workbench.startupEditor": "none",
-    "explorer.confirmDelete": false,
-    "explorer.confirmDragAndDrop": false,
     "git.enableSmartCommit": true,
     "terminal.integrated.defaultProfile.windows": "Git Bash",
     "files.autoSave": "afterDelay",
@@ -13,20 +9,6 @@
     "debug.allowBreakpointsEverywhere": true,
     "editor.foldingHighlight": false,
     "editor.formatOnSave": true,
-    "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter",
-        "editor.codeActionsOnSave": {
-            "source.organizeImports": "explicit"
-        },
-    },
-    "black-formatter.args": [
-        "--line-length",
-        "79"
-    ],
-    "isort.args": [
-        "--profile",
-        "black"
-    ],
     "rust-analyzer.debug.openDebugPane": true,
     "rust-analyzer.check.overrideCommand": null,
     "rust-analyzer.check.command": "clippy",
