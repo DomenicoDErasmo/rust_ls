@@ -1,5 +1,4 @@
 [] Fix NixOS Rust shell
     [] proc-macro server issues
-    [] Get Clippy working - system configuration or .vscode configuration?
     [] If libc is needed, get this working too
 [] Add file attributes
