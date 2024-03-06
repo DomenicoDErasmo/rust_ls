@@ -1,25 +1,20 @@
 let
-  rust_overlay = import (builtins.fetchTarball "https://github.com/oxalica/rust-overlay/archive/master.tar.gz");
-  pkgs = import <nixpkgs> {overlays = [rust_overlay];};
-  rustVersion = "latest";
-  #rustVersion = "1.62.0";
-  rust = pkgs.rust-bin.stable.${rustVersion}.default.override {
-    extensions = [
-      "rust-src" # for rust-analyzer
-      "rust-analyzer"
-    ];
-  };
+  # Update as necessary from https://status.nixos.org/...
+  # The URL takes the form https://github.com/NixOS/nixpkgs/archive/COMMIT_HASH.tar.gz
+  pkgs = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/617579a787259b9a6419492eaac670a5f7663917.tar.gz") {};
 in
   pkgs.mkShell {
-    buildInputs =
-      [
-        rust
-      ]
-      ++ (with pkgs; [
-        pkg-config
-        # other dependencies
-        #gtk3
-        #wrapGAppsHook
-      ]);
-    RUST_BACKTRACE = 1;
+    buildInputs = [
+      pkgs.cargo
+      pkgs.rustc
+      pkgs.rustfmt
+      pkgs.clippy
+
+      # Necessary for the openssl-sys crate:
+      pkgs.openssl
+      pkgs.pkg-config
+    ];
+
+    # See https://discourse.nixos.org/t/rust-src-not-found-and-other-misadventures-of-developing-rust-on-nixos/11570/3?u=samuela.
+    RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
   }
