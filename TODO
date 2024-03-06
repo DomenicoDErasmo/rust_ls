@@ -1,4 +1,3 @@
 [] Fix NixOS Rust shell
-    [] proc-macro server issues
     [] If libc is needed, get this working too
 [] Add file attributes
