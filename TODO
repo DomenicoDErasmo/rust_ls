@@ -1,3 +1,4 @@
 [] Fix NixOS Rust shell
     [] If libc is needed, get this working too
+    [] Setup Neovim - I give up on cargo clippy for VSCode
 [] Add file attributes

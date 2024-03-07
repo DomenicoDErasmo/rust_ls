@@ -1,6 +1,6 @@
 use core::fmt;
 
-// TODO: Write a generic argument parsing library 
+// TODO: Write a generic argument parsing library
 
 /// Struct for error indicating that the argument is not recognized.
 #[derive(Debug, Clone, PartialEq, Eq)]

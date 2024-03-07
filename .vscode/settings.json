@@ -1,5 +1,6 @@
 {
     "nixEnvSelector.suggestion": false,
+    "nixEnvSelector.nixFile": "${workspaceRoot}/shell.nix",
     "git.autofetch": true,
     "workbench.startupEditor": "none",
     "git.enableSmartCommit": true,
@@ -9,13 +10,26 @@
     "debug.allowBreakpointsEverywhere": true,
     "editor.foldingHighlight": false,
     "editor.formatOnSave": true,
+    "editor.rulers": [
+        80
+    ],
+    "rust-analyzer.trace.server": "verbose",
     "rust-analyzer.debug.openDebugPane": true,
     "rust-analyzer.check.overrideCommand": null,
+    "rust-analyzer.checkOnSave": true,
     "rust-analyzer.check.command": "clippy",
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer"
+    },
+    "explorer.confirmPasteNative": false,
+    "rust-analyzer.rustfmt.extraArgs": [
+        "--config",
+        "max_width=80",
+    ],
     "rust-analyzer.check.extraArgs": [
         "--",
         "-D",
-        "clippy::correctness",
+        "correctness",
         "-D",
         "clippy::pedantic",
         "-D",
@@ -210,14 +224,6 @@
         "clippy::verbose_file_reads",
         "-D",
         "clippy::wildcard_enum_match_arm",
-    ],
-    "[rust]": {
-        "editor.defaultFormatter": "rust-lang.rust-analyzer"
-    },
-    "explorer.confirmPasteNative": false,
-    "rust-analyzer.rustfmt.extraArgs": [
-        "--config",
-        "max_width=80",
     ],
     "evenBetterToml.formatter.alignEntries": true,
     "evenBetterToml.formatter.alignComments": true,
