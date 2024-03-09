@@ -1,6 +1,6 @@
 {
     "nixEnvSelector.suggestion": false,
-    "nixEnvSelector.nixFile": "${workspaceRoot}/shell.nix",
+    "nixEnvSelector.nixFile": "${workspaceFolder}/shell.nix",
     "git.autofetch": true,
     "workbench.startupEditor": "none",
     "git.enableSmartCommit": true,
