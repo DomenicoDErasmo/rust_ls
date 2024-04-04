@@ -21,7 +21,10 @@ impl fmt::Display for ArgReadingError {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self.clone() {
             Self::ArgumentNotFoundError(ArgumentNotFoundError { argument }) => {
-                write!(formatter, "Failed to parse arguments. Argument {argument:#?} was not found.")
+                write!(
+                    formatter,
+                    "Failed to parse arguments. Argument {argument:#?} was not found."
+                )
             }
         }
     }

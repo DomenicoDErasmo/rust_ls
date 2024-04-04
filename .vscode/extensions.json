@@ -1,8 +1,0 @@
-{
-    "recommendations": [
-        "rust-lang.rust-analyzer", // rust-analyzer - Rust LSP
-        "tamasfe.even-better-toml", // Even Better TOML - TOML formatting
-        "serayuzgur.crates", // Crates - Cargo autocomplete
-        "vadimcn.vscode-lldb", // LLDB - Rust debugging
-    ]
-}
