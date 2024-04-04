@@ -1,4 +1,9 @@
 {
     "nixEnvSelector.nixFile": "${workspaceFolder}/shell.nix",
-    "rust-analyzer.showUnlinkedFileNotification": false
+    "rust-analyzer.check.command": "clippy",
+    "rust-analyzer.check.extraArgs": [
+        "--",
+        "-D",
+        "clippy::missing_inline_in_public_items"
+    ]
 }

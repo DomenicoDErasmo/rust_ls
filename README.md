@@ -7,4 +7,5 @@ Personal LS implementation.
 2. Download rust with  `rustup default stable`
 
 # Notes
-- Configuring rust-analyzer in .vscode causes the NixOS dev environment to not work.
+- Adding all lints back in doesn't work for some reason, but only having clippy::missing_inline_in_public_items does
+- TODO: figure out why
