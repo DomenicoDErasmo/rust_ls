@@ -17,7 +17,7 @@ pub enum ArgReadingError {
 }
 
 impl fmt::Display for ArgReadingError {
-    // #[inline]
+    #[inline]
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self.clone() {
             Self::ArgumentNotFoundError(ArgumentNotFoundError { argument }) => {
