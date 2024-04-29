@@ -1,2 +1,6 @@
+[] Start with default
+    [] Printing all non-private files
+    [] Sort in alphabetic order
+    [] Print text in blue if the path denotes a folder
 [] Add file attributes
 [] Docs
