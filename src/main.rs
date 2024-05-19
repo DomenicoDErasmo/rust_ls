@@ -1,9 +1,35 @@
 //! Personal LS command implementation
 use colored::Colorize;
+use core::cmp::Ordering;
 use core::fmt::Error;
 use rust_ls::argument_parsing::Arguments;
 use std::env;
 use std::fs::{read_dir, ReadDir};
+
+/// Sorts two strings.
+fn alphabetic_order_with_uppercase_first(
+    left: &String,
+    right: &String,
+) -> Ordering {
+    let Some(first_left_char) = left.chars().next() else {
+        println!("Left filename is empty!");
+        return Ordering::Less;
+    };
+
+    let Some(first_right_char) = right.chars().next() else {
+        println!("Right filename is empty!");
+        return Ordering::Less;
+    };
+
+    match (
+        first_left_char.is_uppercase(),
+        first_right_char.is_uppercase(),
+    ) {
+        (true, false) => Ordering::Less,
+        (false, true) => Ordering::Greater,
+        _ => left.cmp(right),
+    }
+}
 
 /// Gets all paths in the directory.
 fn get_paths(paths: ReadDir) -> Result<Vec<String>, Error> {
@@ -37,7 +63,7 @@ fn get_paths(paths: ReadDir) -> Result<Vec<String>, Error> {
     }
 
     // TODO: folders show up before files but should be opposite
-    result.sort();
+    result.sort_by(alphabetic_order_with_uppercase_first);
 
     Ok(result)
 }

@@ -1,6 +1,42 @@
-[] Start with default
-    [] Printing all non-private files
-    [] Sort in alphabetic order
-    [] Print text in blue if the path denotes a folder
-[] Add file attributes
+[] Add flags
+    - [] -a
+    - [] -A
+    - [] -b
+    - [] -B
+    - [] -c
+    - [] -C
+    - [] -d
+    - [] -D
+    - [] -f
+    - [] -F
+    - [] -g
+    - [] -G
+    - [] -h
+    - [] -H
+    - [] -i
+    - [] -I
+    - [] -k
+    - [] -l
+    - [] -L
+    - [] -m
+    - [] -n
+    - [] -N
+    - [] -o
+    - [] -p
+    - [] -q
+    - [] -Q
+    - [] -r
+    - [] -R
+    - [] -s
+    - [] -S
+    - [] -t
+    - [] -T
+    - [] -u
+    - [] -U
+    - [] -v
+    - [] -w
+    - [] -x
+    - [] -X
+    - [] -Z
+    - [] -1
 [] Docs
