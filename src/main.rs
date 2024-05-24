@@ -1,33 +1,65 @@
 //! Personal LS command implementation
 use core::cmp::Ordering;
+use core::fmt;
+use core::fmt::Display;
 use core::fmt::Error;
 use rust_ls::argument_parsing::Arguments;
 use std::env::args;
 use std::fs::{read_dir, ReadDir};
 
 /// Holds the RGB values of some color.
+#[derive(Eq, Ord, PartialEq, PartialOrd)]
 struct Color {
     /// The RGB to output
     rgb: [u8; 3],
 }
 
-/// A string that supports color printing out of the box.
-struct ColoredString {
-    /// The text to output
-    input: String,
-    /// The RGB color to output
-    rgb: Color,
+impl Color {
+    /// Makes the color blue.
+    pub const fn blue() -> Self {
+        Self {
+            rgb: [u8::MIN, u8::MIN, u8::MAX],
+        }
+    }
+    /// Makes the color white.
+    pub const fn white() -> Self {
+        Self {
+            rgb: [u8::MAX, u8::MAX, u8::MAX],
+        }
+    }
 }
 
-impl ColoredString {}
+// TODO: add bold support, tweak colors to mimick ls
+
+/// A string that supports color printing out of the box.
+#[derive(Eq, Ord, PartialEq, PartialOrd)]
+struct ColoredString {
+    /// The text to output
+    pub input: String,
+    /// The RGB color to output
+    pub color: Color,
+}
+
+impl Display for ColoredString {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            formatter,
+            "\x1B[38;2;{};{};{}m{}\x1B[0m",
+            self.color.rgb[0], self.color.rgb[1], self.color.rgb[2], self.input
+        )
+    }
+}
 
 /// Sorts two strings with lowercase letters first.
-fn alphabetic_lowercase_first(left: &String, right: &String) -> Ordering {
-    let Some(left_first_char) = left.chars().next() else {
+fn alphabetic_lowercase_first(
+    left: &ColoredString,
+    right: &ColoredString,
+) -> Ordering {
+    let Some(left_first_char) = left.input.chars().next() else {
         return Ordering::Less;
     };
 
-    let Some(right_first_char) = right.chars().next() else {
+    let Some(right_first_char) = right.input.chars().next() else {
         return Ordering::Less;
     };
 
@@ -42,7 +74,7 @@ fn alphabetic_lowercase_first(left: &String, right: &String) -> Ordering {
 }
 
 /// Gets all paths in the directory.
-fn get_paths(paths: ReadDir) -> Result<Vec<String>, Error> {
+fn get_paths(paths: ReadDir) -> Result<Vec<ColoredString>, Error> {
     let mut result = vec![];
 
     for path_entry in paths {
@@ -61,7 +93,16 @@ fn get_paths(paths: ReadDir) -> Result<Vec<String>, Error> {
             return Err(Error);
         };
 
-        result.push(name);
+        let colored_string = ColoredString {
+            input: name,
+            color: if file_type.is_dir() {
+                Color::blue()
+            } else {
+                Color::white()
+            },
+        };
+
+        result.push(colored_string);
     }
 
     Ok(result)
@@ -97,9 +138,16 @@ fn main() {
 
     let filtered_filenames = filenames
         .into_iter()
-        .filter(|filename| !filename.starts_with('.'))
-        .collect::<Vec<String>>();
+        .filter(|filename| !filename.input.starts_with('.'))
+        .collect::<Vec<ColoredString>>();
 
-    let output = filtered_filenames.join("  ");
+    let output: String = filtered_filenames
+        .iter()
+        .map(|colored_string| {
+            let mut string = colored_string.to_string();
+            string.push_str("  ");
+            string
+        })
+        .collect();
     println!("{output}");
 }
