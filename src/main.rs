@@ -29,32 +29,38 @@ impl Color {
     }
 }
 
-// TODO: add bold support, tweak colors to mimick ls
-
 /// A string that supports color printing out of the box.
 #[derive(Eq, Ord, PartialEq, PartialOrd)]
-struct ColoredString {
+struct FormattableString {
     /// The text to output
     pub input: String,
     /// The RGB color to output
     pub color: Color,
+    /// Whether to output text in bold
+    pub bold: bool,
 }
 
-impl Display for ColoredString {
+impl Display for FormattableString {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            formatter,
+        let colored_string = format!(
             "\x1B[38;2;{};{};{}m{}\x1B[0m",
             self.color.rgb[0], self.color.rgb[1], self.color.rgb[2], self.input
-        )
+        );
+        let bold_colored_string = format!(
+            "{}{}{}",
+            if self.bold { "\x1b[1m" } else { "" },
+            colored_string,
+            if self.bold { "\x1b[22m" } else { "" },
+        );
+        write!(formatter, "{bold_colored_string}")
     }
 }
 
 // TODO: make custom impl Ord for ColoredString?
 /// Sorts two strings with lowercase letters first.
 fn alphabetic_lowercase_first(
-    left: &ColoredString,
-    right: &ColoredString,
+    left: &FormattableString,
+    right: &FormattableString,
 ) -> Ordering {
     let Some(left_first_char) = left.input.chars().next() else {
         return Ordering::Less;
@@ -75,7 +81,7 @@ fn alphabetic_lowercase_first(
 }
 
 /// Gets all paths in the directory.
-fn get_paths(paths: ReadDir) -> Result<Vec<ColoredString>, Error> {
+fn get_paths(paths: ReadDir) -> Result<Vec<FormattableString>, Error> {
     let mut result = vec![];
 
     for path_entry in paths {
@@ -94,13 +100,14 @@ fn get_paths(paths: ReadDir) -> Result<Vec<ColoredString>, Error> {
             return Err(Error);
         };
 
-        let colored_string = ColoredString {
+        let colored_string = FormattableString {
             input: name,
             color: if file_type.is_dir() {
                 Color::blue()
             } else {
                 Color::white()
             },
+            bold: file_type.is_dir(),
         };
 
         result.push(colored_string);
@@ -140,7 +147,7 @@ fn main() {
     let filtered_filenames = filenames
         .into_iter()
         .filter(|filename| !filename.input.starts_with('.'))
-        .collect::<Vec<ColoredString>>();
+        .collect::<Vec<FormattableString>>();
 
     let output: String = filtered_filenames
         .iter()
