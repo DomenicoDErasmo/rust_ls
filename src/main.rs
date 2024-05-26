@@ -56,7 +56,6 @@ impl Display for FormattableString {
     }
 }
 
-// TODO: make custom impl Ord for ColoredString?
 /// Sorts two strings with lowercase letters first.
 fn alphabetic_lowercase_first(
     left: &FormattableString,
