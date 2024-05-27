@@ -1,4 +1,5 @@
 use core::fmt;
+use std::env::args;
 
 // TODO: Write a generic argument parsing library
 
@@ -82,4 +83,18 @@ impl Arguments {
 
         Ok(Self { path, all })
     }
+}
+
+/// Sets up args from command line.
+///
+/// # Errors
+/// * `ArgReadingError` if one or more values can't be parsed.
+#[inline]
+pub fn setup_args() -> Result<Arguments, ArgReadingError> {
+    let all_raw_args = args().collect::<Vec<String>>();
+    let raw_arg_array = all_raw_args.get(1..);
+    raw_arg_array.map_or_else(
+        || Arguments::new(&vec![]),
+        |arg_array| Arguments::new(&arg_array.to_vec()),
+    )
 }

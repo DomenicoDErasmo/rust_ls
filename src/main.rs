@@ -1,18 +1,7 @@
 //! Personal LS command implementation
-use rust_ls::argument_parsing::{ArgReadingError, Arguments};
+use rust_ls::argument_parsing::setup_args;
 use rust_ls::output::Output;
-use std::env::args;
 use std::fs::{read_dir, DirEntry};
-
-/// Sets up args from command line.
-fn setup_args() -> Result<Arguments, ArgReadingError> {
-    let all_raw_args = args().collect::<Vec<String>>();
-    let raw_arg_array = all_raw_args.get(1..);
-    raw_arg_array.map_or_else(
-        || Arguments::new(&vec![]),
-        |arg_array| Arguments::new(&arg_array.to_vec()),
-    )
-}
 
 fn main() {
     let args = match setup_args() {
