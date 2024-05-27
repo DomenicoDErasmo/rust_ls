@@ -1,6 +1,7 @@
 use crate::argument_parsing::Arguments;
 use crate::output_entry::OutputEntry;
 use core::cmp::Ordering;
+use std::collections::HashMap;
 use std::env::current_dir;
 use std::fs::DirEntry;
 
@@ -32,14 +33,31 @@ fn alphabetic_lowercase_first(
 /// Specifies which files to include based on the filter passed in.
 #[allow(clippy::match_bool)]
 fn include_based_on_args(filename: &OutputEntry, args: &Arguments) -> bool {
-    match (args.all, args.almost_all) {
-        (true, false) => true,
-        (true | false, true) => {
-            !(filename.displayed_name() == "."
-                || filename.displayed_name() == "..")
-        }
-        (false, false) => !filename.displayed_name().starts_with('.'),
+    let mut predicates: HashMap<&str, bool> = HashMap::new();
+    predicates.insert("default", !filename.displayed_name().starts_with('.'));
+
+    if args.all {
+        predicates.remove("default");
+        predicates.insert("all", true);
     }
+
+    if args.almost_all {
+        predicates.remove("default");
+        predicates.insert(
+            "almost_all",
+            !(filename.displayed_name() == "."
+                || filename.displayed_name() == ".."),
+        );
+    }
+
+    if args.ignore_backups {
+        predicates.insert(
+            "ignore_backups",
+            !filename.displayed_name().ends_with('~'),
+        );
+    }
+
+    predicates.iter().all(|x| *x.1)
 }
 
 impl Output {

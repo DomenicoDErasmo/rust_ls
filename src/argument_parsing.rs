@@ -32,14 +32,57 @@ impl fmt::Display for ArgReadingError {
 }
 
 /// LS arguments
+/// TODO: can I remove this allow and refactor?
+#[allow(clippy::struct_excessive_bools)]
 #[derive(Debug, Default, PartialEq, Eq)]
 pub struct Arguments {
     /// The path to search.
     pub path: String,
     /// Do not ignore entries starting with .
+    ///
+    /// ### Example
+    ///
+    /// <ins> Without -a </ins>
+    /// ```shell
+    /// $ ls
+    /// foo.txt
+    /// ```
+    /// <ins> With -a </ins>
+    /// ```shell
+    /// $ ls -a
+    /// . .. .hidden foo.txt
+    /// ```
     pub all: bool,
     /// Do not list implied . and ..
+    ///
+    /// ### Example
+    ///
+    /// <ins> Without -A </ins>
+    /// ```shell
+    /// $ ls
+    /// foo.txt
+    /// ```
+    /// <ins> With -A </ins>
+    /// ```shell
+    /// $ ls -A
+    /// .hidden foo.txt
+    /// ```
     pub almost_all: bool,
+    /// Do not list implied entries ending with ~
+    ///
+    /// ### Example
+    ///
+    /// <ins> Without -B </ins>
+    /// ```shell
+    /// $ ls
+    /// foo.txt foo.text~
+    /// ```
+    /// <ins> With -B </ins>
+    /// ```shell
+    /// $ ls -B
+    /// foo.txt
+    /// ```
+    pub ignore_backups: bool,
 }
 
 impl Arguments {
@@ -55,11 +98,14 @@ impl Arguments {
     /// If an argument is not recognized, returns an `ArgumentNotFoundError`.
     #[inline]
     pub fn new(raw_args: &Vec<String>) -> Result<Self, ArgReadingError> {
+        // Handling the path arg
         let mut path_found = false;
-
         let mut path = String::new();
+
+        // Handling flags
         let mut all = false;
         let mut almost_all = false;
+        let mut ignore_backups = false;
 
         for arg in raw_args {
             match arg.as_str() {
@@ -68,6 +114,9 @@ impl Arguments {
                 }
                 "-A" | "--almost-all" => {
                     almost_all = true;
+                }
+                "-B" | "--ignore-backups" => {
+                    ignore_backups = true;
                 }
                 not_parsed_as_flag => {
                     if path_found {
@@ -91,6 +140,7 @@ impl Arguments {
             path,
             all,
             almost_all,
+            ignore_backups,
         })
     }
 }
