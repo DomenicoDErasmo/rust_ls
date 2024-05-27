@@ -60,7 +60,7 @@ impl Arguments {
 
         for arg in raw_args {
             match arg.as_str() {
-                "-a" => {
+                "-a" | "--all" => {
                     all = true;
                 }
                 not_parsed_as_flag => {
