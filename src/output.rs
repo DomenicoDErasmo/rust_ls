@@ -32,9 +32,13 @@ fn alphabetic_lowercase_first(
 /// Specifies which files to include based on the filter passed in.
 #[allow(clippy::match_bool)]
 fn include_based_on_args(filename: &OutputEntry, args: &Arguments) -> bool {
-    match args.all {
-        true => true,
-        false => !filename.displayed_name().starts_with('.'),
+    match (args.all, args.almost_all) {
+        (true, false) => true,
+        (true | false, true) => {
+            !(filename.displayed_name() == "."
+                || filename.displayed_name() == "..")
+        }
+        (false, false) => !filename.displayed_name().starts_with('.'),
     }
 }
 

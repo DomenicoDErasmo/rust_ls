@@ -38,6 +38,8 @@ pub struct Arguments {
     pub path: String,
     /// Do not ignore entries starting with .
     pub all: bool,
+    /// Do not list implied . and ..
+    pub almost_all: bool,
 }
 
 impl Arguments {
@@ -57,11 +59,15 @@ impl Arguments {
 
         let mut path = String::new();
         let mut all = false;
+        let mut almost_all = false;
 
         for arg in raw_args {
             match arg.as_str() {
                 "-a" | "--all" => {
                     all = true;
+                }
+                "-A" | "--almost-all" => {
+                    almost_all = true;
                 }
                 not_parsed_as_flag => {
                     if path_found {
@@ -81,7 +87,11 @@ impl Arguments {
             "./".clone_into(&mut path);
         }
 
-        Ok(Self { path, all })
+        Ok(Self {
+            path,
+            all,
+            almost_all,
+        })
     }
 }
 
