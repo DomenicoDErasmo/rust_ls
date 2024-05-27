@@ -1,3 +1,4 @@
+- [ ] Get glob working
 - [ ] Add flags
     - [ ] -b
     - [ ] -c
@@ -36,4 +37,4 @@
     - [ ] -X
     - [ ] -Z
     - [ ] -1
-[] Docs
+- [ ] Docs
