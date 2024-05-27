@@ -5,53 +5,20 @@ mod test_argument_parsing {
         ArgReadingError, ArgumentNotFoundError, Arguments,
     };
 
+    #[allow(clippy::needless_update)]
     #[test]
     fn test_new() {
         let no_args: Vec<String> = vec![];
         let no_arg_parser = Arguments::new(&no_args).unwrap_or_default();
         assert_eq!(no_arg_parser, Arguments::default());
 
-        let long_listing_only_arg: Vec<String> = vec!["-l".to_owned()];
+        let all_only_arg: Vec<String> = vec!["-a".to_owned()];
         let long_listing_only_arg_parser =
-            Arguments::new(&long_listing_only_arg).unwrap();
+            Arguments::new(&all_only_arg).unwrap();
         assert_eq!(
             long_listing_only_arg_parser,
             Arguments {
-                long_listing: true,
-                ..Default::default()
-            }
-        );
-
-        let reverse_sort_only_arg: Vec<String> = vec!["-r".to_owned()];
-        let reverse_sort_only_arg_parser: Arguments =
-            Arguments::new(&reverse_sort_only_arg).unwrap();
-        assert_eq!(
-            reverse_sort_only_arg_parser,
-            Arguments {
-                reverse_sort: true,
-                ..Default::default()
-            }
-        );
-
-        let sort_by_time_arg: Vec<String> = vec!["-t".to_owned()];
-        let sort_by_time_arg_parser: Arguments =
-            Arguments::new(&sort_by_time_arg).unwrap();
-        assert_eq!(
-            sort_by_time_arg_parser,
-            Arguments {
-                time_sort: true,
-                ..Default::default()
-            }
-        );
-
-        let multiple_args: Vec<String> = vec!["-l".to_owned(), "-t".to_owned()];
-        let multiple_args_parser: Arguments =
-            Arguments::new(&multiple_args).unwrap();
-        assert_eq!(
-            multiple_args_parser,
-            Arguments {
-                long_listing: true,
-                time_sort: true,
+                all: true,
                 ..Default::default()
             }
         );

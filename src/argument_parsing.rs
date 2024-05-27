@@ -33,14 +33,10 @@ impl fmt::Display for ArgReadingError {
 /// LS arguments
 #[derive(Debug, Default, PartialEq, Eq)]
 pub struct Arguments {
-    /// Enables long listing format, such as author, time created, and permissions.
-    pub long_listing: bool,
-
-    /// Enables reverse sorting.
-    pub reverse_sort: bool,
-
-    /// Sorts output by time.
-    pub time_sort: bool,
+    /// The path to search.
+    pub path: String,
+    /// Do not ignore entries starting with .
+    pub all: bool,
 }
 
 impl Arguments {
@@ -56,35 +52,34 @@ impl Arguments {
     /// If an argument is not recognized, returns an `ArgumentNotFoundError`.
     #[inline]
     pub fn new(raw_args: &Vec<String>) -> Result<Self, ArgReadingError> {
-        let mut long_listing = false;
-        let mut reverse_sort = false;
-        let mut time_sort = false;
+        let mut path_found = false;
+
+        let mut path = String::new();
+        let mut all = false;
 
         for arg in raw_args {
             match arg.as_str() {
-                "-l" => {
-                    long_listing = true;
+                "-a" => {
+                    all = true;
                 }
-                "-r" => {
-                    reverse_sort = true;
-                }
-                "-t" => {
-                    time_sort = true;
-                }
-                not_found => {
-                    return Err(ArgReadingError::ArgumentNotFoundError(
-                        ArgumentNotFoundError {
-                            argument: not_found.to_owned(),
-                        },
-                    ));
+                not_parsed_as_flag => {
+                    if path_found {
+                        return Err(ArgReadingError::ArgumentNotFoundError(
+                            ArgumentNotFoundError {
+                                argument: not_parsed_as_flag.to_owned(),
+                            },
+                        ));
+                    }
+                    not_parsed_as_flag.clone_into(&mut path);
+                    path_found = true;
                 }
             };
         }
 
-        Ok(Self {
-            long_listing,
-            reverse_sort,
-            time_sort,
-        })
+        if path.is_empty() {
+            "./".clone_into(&mut path);
+        }
+
+        Ok(Self { path, all })
     }
 }

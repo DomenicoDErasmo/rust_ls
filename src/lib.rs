@@ -2,4 +2,5 @@
 
 pub mod argument_parsing;
 pub mod color;
-pub mod formattable_string;
+pub mod output;
+pub mod output_entry;
