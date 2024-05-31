@@ -3,7 +3,7 @@ use crate::output_entry::OutputEntry;
 use core::cmp::Ordering;
 use std::collections::HashMap;
 use std::env::current_dir;
-use std::fs::DirEntry;
+use std::path::PathBuf;
 
 pub struct Output {
     /// The list of `OutputEntry` objects
@@ -63,11 +63,11 @@ fn include_based_on_args(filename: &OutputEntry, args: &Arguments) -> bool {
 impl Output {
     #[inline]
     #[must_use]
-    pub fn new(dir_entries: Vec<DirEntry>) -> Option<Self> {
+    pub fn new(dir_entries: Vec<PathBuf>) -> Option<Self> {
         let mut paths: Vec<_> = dir_entries
             .into_iter()
             .map(|path| OutputEntry {
-                file: path.path().as_path().to_owned(),
+                file: path.as_path().to_owned(),
                 ..Default::default()
             })
             .collect();
