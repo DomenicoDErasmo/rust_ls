@@ -23,12 +23,6 @@ fn main() {
         return;
     };
 
-    // TODO:
-    // read_dir on the target directory for the regex pattern
-    // use its canonical path
-    // if we have a file that matches the pattern, add to output
-    // if we have a directory that matches the pattern, read_dir it
-    // should I just convert my DirEntries to PathBuf and use PathBuf?
     let mut path_bufs = vec![];
     for glob in globs {
         let Ok(path) = glob else {
@@ -58,7 +52,9 @@ fn main() {
             path_bufs.append(&mut curernt_directory_paths);
         }
 
-        if path.is_file() {}
+        if path.is_file() {
+            path_bufs.push(path);
+        }
     }
     let Some(paths) = Output::new(path_bufs) else {
         eprintln!("Failed to create OutputEntry from dir_entries.");

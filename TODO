@@ -1,4 +1,5 @@
-- [ ] Get glob working
+- [ ] Format glob output to act like ls with glob
+- [ ] Canonical path support
 - [ ] Add flags
     - [ ] -b
     - [ ] -c
